@@ -20,7 +20,7 @@ module Forem
         flash.alert = t("forem.post.not_created_topic_locked")
         redirect_to [@topic.forum, @topic] and return
       end
-      @post = @topic.posts.build(params[:post])
+      @post = @topic.posts.build(post_params)
       @post.user = forem_user
       if @post.save
         flash[:notice] = t("forem.post.created")
@@ -40,7 +40,7 @@ module Forem
     def update
       authorize! :edit_post, @topic.forum
       @post = Forem::Post.find(params[:id])
-      if @post.owner_or_admin?(forem_user) and @post.update_attributes(params[:post])
+      if @post.owner_or_admin?(forem_user) and @post.update_attributes(post_params)
         redirect_to [@topic.forum, @topic], :notice => t('edited', :scope => 'forem.post')
       else
         flash.now.alert = t("forem.post.not_edited")
@@ -78,6 +78,10 @@ module Forem
         flash[:alert] = t('forem.general.flagged_for_spam') + ' ' + t('forem.general.cannot_create_post')
         redirect_to :back
       end
+    end
+
+    def post_params
+      params.require(:post).permit(:text)
     end
   end
 end
