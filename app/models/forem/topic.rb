@@ -22,8 +22,8 @@ module Forem
     extend FriendlyId
     friendly_id :subject, :use => :slugged
 
-    attr_accessible :subject, :posts_attributes
-    attr_accessible :subject, :posts_attributes, :pinned, :locked, :hidden, :forum_id, :as => :admin
+    # attr_accessible :subject, :posts_attributes
+    # attr_accessible :subject, :posts_attributes, :pinned, :locked, :hidden, :forum_id, :as => :admin
 
     belongs_to :forum
     belongs_to :user, :class_name => Forem.user_class.to_s

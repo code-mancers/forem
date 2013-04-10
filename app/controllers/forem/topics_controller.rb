@@ -24,7 +24,7 @@ module Forem
 
     def create
       authorize! :create_topic, @forum
-      @topic = @forum.topics.build(params[:topic], :as => :default)
+      @topic = @forum.topics.build(topic_params)
       @topic.user = forem_user
       if @topic.save
         flash[:notice] = t("forem.topic.created")
@@ -89,6 +89,10 @@ module Forem
         flash[:alert] = t('forem.general.flagged_for_spam') + ' ' + t('forem.general.cannot_create_topic')
         redirect_to :back
       end
+    end
+
+    def topic_params
+      params.require(:topic).permit(:subject, :posts_attributes => [:text])
     end
   end
 end
