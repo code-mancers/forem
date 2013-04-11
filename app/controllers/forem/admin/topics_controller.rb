@@ -4,7 +4,7 @@ module Forem
       before_filter :find_topic
 
       def update
-        if @topic.update_attributes(params[:topic], :as => :admin)
+        if @topic.update_attributes(topic_params)
           flash[:notice] = t("forem.topic.updated")
           redirect_to forum_topic_path(@topic.forum, @topic)
         else
@@ -41,6 +41,11 @@ module Forem
       private
         def find_topic
           @topic = Forem::Topic.find(params[:id])
+        end
+
+        def topic_params
+          params.require(:topic).permit(:subject, :pinned, :locked, :hidden,
+            :forum_id, :posts_attributes => [:text] )
         end
     end
   end

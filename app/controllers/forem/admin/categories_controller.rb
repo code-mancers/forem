@@ -12,7 +12,7 @@ module Forem
       end
 
       def create
-        @category = Forem::Category.new(params[:category])
+        @category = Forem::Category.new(category_params)
         if @category.save
           flash[:notice] = t("forem.admin.category.created")
           redirect_to admin_categories_path
@@ -23,7 +23,7 @@ module Forem
       end
 
       def update
-        if @category.update_attributes(params[:category])
+        if @category.update_attributes(category_params)
           flash[:notice] = t("forem.admin.category.updated")
           redirect_to admin_categories_path
         else
@@ -43,6 +43,9 @@ module Forem
           @category = Forem::Category.find(params[:id])
         end
 
+        def category_params
+          params.require(:category).permit(:name)
+        end
     end
   end
 end

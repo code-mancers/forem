@@ -12,7 +12,7 @@ module Forem
       end
 
       def create
-        @forum = Forem::Forum.new(params[:forum])
+        @forum = Forem::Forum.new(forum_params)
         if @forum.save
           flash[:notice] = t("forem.admin.forum.created")
           redirect_to admin_forums_path
@@ -23,7 +23,7 @@ module Forem
       end
 
       def update
-        if @forum.update_attributes(params[:forum])
+        if @forum.update_attributes(forum_params)
           flash[:notice] = t("forem.admin.forum.updated")
           redirect_to admin_forums_path
         else
@@ -44,6 +44,10 @@ module Forem
           @forum = Forem::Forum.find(params[:id])
         end
 
+        def forum_params
+          params.require(:forum).permit(:category_id, :title, :name,
+            :description, :moderator_ids => [])
+        end
     end
   end
 end

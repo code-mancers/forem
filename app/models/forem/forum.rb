@@ -16,8 +16,6 @@ module Forem
 
     validates :category, :name, :description, :presence => true
 
-    attr_accessible :category_id, :title, :name, :description, :moderator_ids
-
     alias_attribute :title, :name
 
     # Fix for #339
