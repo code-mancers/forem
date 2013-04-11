@@ -4,7 +4,7 @@ module Forem
       before_filter :find_category, :only => [:edit, :update, :destroy]
 
       def index
-        @category = Forem::Category.all
+        @category = Forem::Category.accessible_by(current_ability)
       end
 
       def new
@@ -13,6 +13,8 @@ module Forem
 
       def create
         @category = Forem::Category.new(category_params)
+        authorize!(:create, @category)
+
         if @category.save
           flash[:notice] = t("forem.admin.category.created")
           redirect_to admin_categories_path
@@ -23,6 +25,8 @@ module Forem
       end
 
       def update
+        authorize!(:update, @category)
+
         if @category.update_attributes(category_params)
           flash[:notice] = t("forem.admin.category.updated")
           redirect_to admin_categories_path
@@ -33,6 +37,8 @@ module Forem
       end
 
       def destroy
+        authorize!(:destroy, @category)
+
         @category.destroy
         flash[:notice] = t("forem.admin.category.deleted")
         redirect_to admin_categories_path

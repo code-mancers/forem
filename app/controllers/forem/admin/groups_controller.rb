@@ -4,7 +4,7 @@ module Forem
       before_filter :find_group, :only => [:show, :destroy]
 
       def index
-        @groups = Forem::Group.all
+        @groups = Forem::Group.accessible_by(current_ability)
       end
 
       def new
@@ -13,6 +13,8 @@ module Forem
 
       def create
         @group = Forem::Group.new(group_params)
+        authorize!(:create, @group)
+
         if @group.save
           flash[:notice] = t("forem.admin.group.created")
           redirect_to [:admin, @group]
@@ -23,6 +25,8 @@ module Forem
       end
 
       def destroy
+        authorize!(:destroy, @group)
+
         @group.destroy
         flash[:notice] = t("forem.admin.group.deleted")
         redirect_to admin_groups_path
