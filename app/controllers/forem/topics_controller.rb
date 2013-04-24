@@ -51,7 +51,7 @@ module Forem
       if find_topic
         @topic.subscribe_user(forem_user.id)
         flash[:notice] = t("forem.topic.subscribed")
-        redirect_to forum_topic_url(@topic.forum, @topic)
+        redirect_to forum_topic_path(@topic.forum, @topic)
       end
     end
 
@@ -59,7 +59,7 @@ module Forem
       if find_topic
         @topic.unsubscribe_user(forem_user.id)
         flash[:notice] = t("forem.topic.unsubscribed")
-        redirect_to forum_topic_url(@topic.forum, @topic)
+        redirect_to forum_topic_path(@topic.forum, @topic)
       end
     end
 

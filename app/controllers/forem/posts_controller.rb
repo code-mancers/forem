@@ -24,7 +24,7 @@ module Forem
       @post.user = forem_user
       if @post.save
         flash[:notice] = t("forem.post.created")
-        redirect_to forum_topic_url(@topic.forum, @topic, :page => @topic.last_page)
+        redirect_to forum_topic_path(@topic.forum, @topic, :page => @topic.last_page)
       else
         params[:reply_to_id] = params[:post][:reply_to_id]
         flash.now.alert = t("forem.post.not_created")
