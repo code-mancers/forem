@@ -81,7 +81,7 @@ module Forem
     end
 
     def post_params
-      params.require(:post).permit(:text)
+      params.require(:post).permit(:text, :reply_to_id)
     end
   end
 end
