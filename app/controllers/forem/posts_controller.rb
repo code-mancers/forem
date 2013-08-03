@@ -33,14 +33,15 @@ module Forem
     end
 
     def edit
-      authorize! :edit_post, @topic.forum
       @post = Forem::Post.find(params[:id])
+      authorize! :update, @post
     end
 
     def update
-      authorize! :edit_post, @topic.forum
       @post = Forem::Post.find(params[:id])
-      if @post.owner_or_admin?(forem_user) and @post.update_attributes(post_params)
+      authorize! :update, @post
+
+      if @post.update_attributes(post_params)
         redirect_to [@topic.forum, @topic], :notice => t('edited', :scope => 'forem.post')
       else
         flash.now.alert = t("forem.post.not_edited")
@@ -50,21 +51,17 @@ module Forem
 
     def destroy
       @post = @topic.posts.find(params[:id])
-      if @post.owner_or_admin?(forem_user)
-        @post.destroy
-        if @post.topic.posts.count == 0
-          @post.topic.destroy
-          flash[:notice] = t("forem.post.deleted_with_topic")
-          redirect_to [@topic.forum]
-        else
-          flash[:notice] = t("forem.post.deleted")
-          redirect_to [@topic.forum, @topic]
-        end
+      authorize! :destroy, @post
+
+      @post.destroy
+      if @post.topic.posts.count == 0
+        @post.topic.destroy
+        flash[:notice] = t("forem.post.deleted_with_topic")
+        redirect_to [@topic.forum]
       else
-        flash[:alert] = t("forem.post.cannot_delete")
+        flash[:notice] = t("forem.post.deleted")
         redirect_to [@topic.forum, @topic]
       end
-
     end
 
     private
