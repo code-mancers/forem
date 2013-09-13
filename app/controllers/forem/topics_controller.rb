@@ -92,7 +92,7 @@ module Forem
     end
 
     def topic_params
-      params.require(:topic).permit(:subject, :posts_attributes => [:text])
+      params.require(:topic).permit(:subject, :posts_attributes => [:text, :attachment])
     end
   end
 end
