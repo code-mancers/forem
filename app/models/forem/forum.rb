@@ -13,6 +13,7 @@ module Forem
     has_many :posts,      :through => :topics, :dependent => :destroy
     has_many :moderators, :through => :moderator_groups, :source => :group
     has_many :moderator_groups
+    has_many :subscriptions, :as => :subject
 
     validates :category, :name, :description, :presence => true
 
@@ -35,6 +36,20 @@ module Forem
 
     def moderator?(user)
       user && (user.forem_group_ids & moderator_ids).any?
+    end
+
+    def subscriber?(user_id)
+      subscriptions.exists?(:subscriber_id => user_id)
+    end
+
+    def subscribe_user(user_id)
+      unless subscriber?(user_id)
+        subscriptions.create!(:subscriber_id => user_id)
+      end
+    end
+
+    def unsubscribe_user(user_id)
+      subscriptions.where(:subscriber_id => user_id).destroy_all
     end
   end
 end

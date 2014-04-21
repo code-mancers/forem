@@ -2,6 +2,11 @@ Forem::Engine.routes.draw do
   root :to => "forums#index"
 
   resources :forums, :only => [:index, :show] do
+    member do 
+      put :subscribe
+      put :unsubscribe
+    end
+
     resources :topics do
       member do
         get :subscribe

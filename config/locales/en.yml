@@ -80,6 +80,8 @@ en:
         one: 1 post
         other: "%{count} posts"
       moderator_tools: "Moderation Tools"
+      subscribed: You have subscribed to this forum.
+      unsubscribed: You have unsubscribed from this forum.
     forums:
       index:
         title: Forums

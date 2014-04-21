@@ -1,6 +1,6 @@
 module Forem
   class ForumsController < Forem::ApplicationController
-    load_and_authorize_resource :class => 'Forem::Forum', :only => :show
+    load_and_authorize_resource :class => 'Forem::Forum', :only => [:show, :subscribe, :unsubscribe]
     helper 'forem/topics'
 
     def index
@@ -22,6 +22,18 @@ module Forem
         format.html
         format.atom { render :layout => false }
       end
+    end
+
+    def subscribe
+      @forum.subscribe_user(forem_user.id)
+      flash[:notice] = t("forem.forum.subscribed")
+      redirect_to forum_path(@forum)
+    end
+
+    def unsubscribe
+      @forum.unsubscribe_user(forem_user.id)
+      flash[:notice] = t("forem.forum.unsubscribed")
+      redirect_to forum_path(@forum)
     end
 
     private
