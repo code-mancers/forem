@@ -24,7 +24,7 @@ module Forem
 
     belongs_to :forum
     belongs_to :user, :class_name => Forem.user_class.to_s
-    has_many   :subscriptions
+    has_many   :subscriptions, :as => :subject
     has_many   :posts, :dependent => :destroy, :order => "forem_posts.created_at ASC"
 
     accepts_nested_attributes_for :posts
