@@ -98,7 +98,8 @@ module Forem
     end
 
     def email_topic_subscribers
-      topic.subscriptions.includes(:subscriber).find_each do |subscription|
+      conditions = ['(subject_id = ? and subject_type = ?) or (subject_id = ? and subject_type = ?)', id, 'Forem::Topic', topic.forum.id, 'Forem::Forum']
+      Subscription.includes(:subscriber).find_each(:conditions => conditions) do |subscription|
         if subscription.subscriber != user
           subscription.send_notification(id)
         end
